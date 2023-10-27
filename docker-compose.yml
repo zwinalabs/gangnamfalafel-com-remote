@@ -1,0 +1,75 @@
+version: "3.8"
+services:
+  app:
+    build:
+      args:
+        user: wwwdata
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: qrganfal
+    container_name: qrganfal-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - qrganfal
+
+  mysql:
+    image: mysql:8.0
+    container_name: qrganfal-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    networks:
+      - qrganfal
+
+  nginx:
+    image: nginx:alpine
+    container_name: qrganfal-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - qrganfal
+
+  pma:
+    depends_on:
+      - mysql
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=${DB_HOST}
+      - PMA_USER=${DB_USERNAME}
+      - PMA_PASSWORD=${DB_PASSWORD}
+      - PMA_PORT=${DB_PORT}
+    ports:
+      - 8001:80
+    networks:
+      - qrganfal
+
+    # Mailing Server
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+       driver: 'none'
+    ports:
+      - 1025:1025 
+      - 8025:8025
+    networks:
+      - qrganfal
+
+networks:
+  qrganfal:
+    driver: bridge

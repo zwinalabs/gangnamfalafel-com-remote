@@ -1,0 +1,25 @@
+tr.hide-table-padding td {
+    padding: 0;
+}
+
+.expand-button {
+    position: relative;
+}
+
+.accordion-toggle .expand-button:after {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translate(0, -50%);
+    content: "-";
+}
+.accordion-toggle.collapsed .expand-button:after {
+    content: "+";
+}
+.accordion-toggle .expand-button:after,
+.accordion-toggle.collapsed .expand-button:after {
+    padding: 1px;
+    color: #1e2120;
+    font-weight: bold;
+    font-size: 20px;
+}

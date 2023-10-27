@@ -1,0 +1,24 @@
+.bg-primary {
+    background-color: #02643A !important;
+}
+.headroom--not-top.navbar-theme-primary{
+    background-color: #333333;
+}
+form[name="newslellter"] .btn-primary {
+    color: #02643A;
+    background-color: #fff;
+    border-color: #fff;
+}
+form[name="newslellter"] .btn-primary:hover {
+    color: #02643A;
+    background-color: #d1d2d3;
+    border-color: #d1d2d3;
+}
+
+.preloader .loader-element .loader-animated-dot {
+    background: #02643A;
+}
+
+.section-header{
+    padding-bottom: 6px;
+}

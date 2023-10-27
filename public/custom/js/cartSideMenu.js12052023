@@ -1,0 +1,270 @@
+"use strict";
+function openNav() {
+    $("#cartSideNav").addClass('sidenav-cart-open').removeClass('sidenav-cart-close');
+    if(Object.keys(cartContent.items).length > 0){
+        $("#link-footer-basket").html('Valider achats');
+        $("#link-footer-basket").on("click", function(){
+            if(Object.keys(cartContent.items).length > 0){
+                $(".callOutShoppingButtonBottom").hide();
+                $("#cartSideNav").addClass('sidenav-cart-close').removeClass('sidenav-cart-open');
+                $("#checkoutModal").addClass('sidenav-cart-open').removeClass('sidenav-cart-close');
+                $("#link-footer-basket").html("{{ __('Place order') }}");
+                $("#checkoutModal").show();
+                saveCartBulk();
+            }
+        });
+    }else{
+        $("#link-footer-basket").html('Afficher le panier');
+        $("#link-footer-basket").off('click');
+        $(".callOutShoppingButtonBottom").show();
+    }
+    if (localStorage.getItem("comment")) {
+        comment = localStorage.getItem("comment");
+        if($('#cart-comment').length > 0){
+            $('#cart-comment').val(comment.toString());
+        }
+        if($('#cart-details-comment').length > 0){
+            $('#cart-details-comment').val(comment.toString());
+        }
+    }
+}
+
+function closeNav() {
+   $("#cartSideNav").addClass('sidenav-cart-close').removeClass('sidenav-cart-open');
+   $("#link-footer-basket").html('Afficher le panier');
+   $("#link-footer-basket").off('click');
+   $(".callOutShoppingButtonBottom").show();
+}
+
+function closeNavCheckout() {
+    $(".callOutShoppingButtonBottom").show();
+    $("#checkoutModal").addClass('sidenav-cart-close').removeClass('sidenav-cart-open');
+    openNav();
+}
+
+$(window).scroll(function(){
+    if ($(window).scrollTop() >= 1) {
+        $('#navbar-main').addClass('custom-nav');
+        $('#topDarkLogo').show();
+        $('#topLightLogo').hide();
+    }
+    else {
+        $('#navbar-main').removeClass('custom-nav');
+        $('#topDarkLogo').hide();
+        $('#topLightLogo').show();
+    }
+});
+
+
+ function saveCartBulk(){    
+    //displayLoader(true);
+    if (localStorage.getItem("cartLS")) {
+        cartLS = JSON.parse(localStorage.getItem("cartLS"));
+    }
+    let fullCartData = cartLS.data;
+    let cItem = [];
+
+    axios.post('/cart-add-bulk', {
+        data: fullCartData
+    })
+    .then(function(response) {
+        for(var key in fullCartData ) {
+            if (fullCartData.hasOwnProperty(key)) {
+               cItem =  fullCartData[key];
+               cItem.remote = true;
+            }
+            fullCartData[key] = cItem;
+            console.log("cItem::"+JSON.stringify(cItem));
+        }
+        if(response.status){
+            console.log('success > st: '+response.status);
+        }else{
+            console.log('error > st: '+response.status);
+        }
+    })
+    .catch(function(error) {
+        
+    }).finally(() => {
+        cartLS.data = fullCartData;
+        localStorage.setItem("cartLS", JSON.stringify(cartLS));
+        callCheckout();
+        showCommentIcone();
+        mPaymentChoice("");
+
+    });
+            
+    /*cartLS.data = fullCartData;
+    localStorage.setItem("cartLS", JSON.stringify(cartLS));
+    
+    setTimeout(() => { displayLoader(false);callCheckout();}, "5000");*/
+}
+
+function saveCartBorneBulk(){    
+    //displayLoader(true);
+    if (localStorage.getItem("cartLS")) {
+        cartLS = JSON.parse(localStorage.getItem("cartLS"));
+    }
+    let fullCartData = cartLS.data;
+    let cItem = [];
+
+    axios.post('/cart-add-bulk', {
+        data: fullCartData
+    })
+    .then(function(response) {
+        for(var key in fullCartData ) {
+            if (fullCartData.hasOwnProperty(key)) {
+               cItem =  fullCartData[key];
+               cItem.remote = true;
+            }
+            fullCartData[key] = cItem;
+            console.log("cItem::"+JSON.stringify(cItem));
+        }
+        if(response.status){
+            console.log('success > st: '+response.status);
+        }else{
+            console.log('error > st: '+response.status);
+        }
+    })
+    .catch(function(error) {
+        
+    }).finally(() => {
+        cartLS.data = fullCartData;
+        localStorage.setItem("cartLS", JSON.stringify(cartLS));
+        callCheckout();
+        showCommentIcone();
+        mPaymentChoice("");
+        //checkBorneTerminal();
+    });
+            
+    /*cartLS.data = fullCartData;
+    localStorage.setItem("cartLS", JSON.stringify(cartLS));
+    setTimeout(() => { displayLoader(false);callCheckout();}, "5000");*/
+}
+
+function callCheckout() {
+    axios.get('/cart-checkout-api').then(function (response) {
+            $('#checkoutElemtsContent').html("");
+            $('#checkoutElemtsContent').append(response.data.html);
+            $('#checkoutBorneContent').html("");
+            $('#checkoutBorneContent').append(response.data.html);
+    }).catch(function (error) {
+        
+    });
+}
+
+function setDiscountCoupon(){
+    if (localStorage.getItem("cartLS")) {
+        cartLS = JSON.parse(localStorage.getItem("cartLS"));
+    }
+    let discountCoup = $("#coupon_code").val();
+    if(discountCoup !== undefined && typeof discountCoup !== 'undefined' && discountCoup != "" && discountCoup.length  > 3){
+        /*axios.get('/set-coupon-api').then(function (response) {
+            
+        }).catch(function (error) {
+            
+        });*/
+        $("#promo_code_war").hide();
+        $("#promo_code_succ").show();
+    }else{
+        $("#promo_code_war").show();
+        $("#promo_code_succ").hide();
+    }
+}
+
+function showCheckoutDetailsModel(){
+    $("#checkoutDetailsBorneModal").show();
+    saveCartBorneBulk();
+}
+function hideCheckoutDetailsModel(){
+    $("#checkoutDetailsBorneModal").hide();
+}
+function showCheckoutModel(){
+    hideCheckoutDetailsModel();
+    $("#checkoutBorneModal").show();
+
+}
+
+function hideCheckoutModel(){
+    $("#checkoutBorneModal").hide();
+}
+
+function setCommentToTxt(){
+    showCommentIcone();
+}
+
+function storeOrder(){
+    let data = {
+        "_token": $('meta[name="csrf-token"]').attr('content'),
+        table_id:$('#table_id').val(),
+        client_name:$('#client_name').val(),
+        paymentType:$('#paymentType').val(),
+        phone:$('#client_phone').val(),
+        comment: $('#comment').val(),
+        timeslot:$('#timeslot').val()
+    };
+    axios.post('/order', data ).then(function(response) {
+        console.log(">>>>>E-monétique P400 api:");
+        console.log(response);
+        console.log("E-monétique P400 api<<<<<<");
+        $("#idResultPaymentTerminal").html(JSON.stringify(response));
+    }).catch(function(error) {
+        console.log("E-monétique P400 api error: "+error);
+    }).finally(() => {
+        console.log("E-monétique P400 api");
+    });
+}
+function checkBorneTerminal(){
+    let mnt = cartLS.total*100;
+    let token  = $('meta[name="csrf-token"]').attr('content');
+
+    let sendingData = {
+        "amount": mnt.toString(),
+        "transactionId": "Commande #693"
+    };
+    let settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "//192.168.1.200:8400/borne",
+        "method": "POST",
+        "headers": {
+            "content-type": "application/json",
+            "Access-Control-Allow-Origin":"*",
+            "cache-control": "no-cache",
+            "postman-token": token 
+        },
+        "processData": false,
+        "data": sendingData
+    }
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+        let objsss = JSON.parse(response);
+        $("#idResultPaymentTerminal").html(response);
+    });
+
+    /*var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "http://192.168.1.200:8400/borne",
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "cache-control": "no-cache",
+          "postman-token": token
+        },
+        "processData": false,
+        "data": sendingData
+    }
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+        $("#idResultPaymentTerminal").html(response);
+    });*/
+}
+function showCheckoutSuccessModel(){
+    $("#checkoutSuccessBorneModal").show();
+    saveCartBorneBulk();
+}
+function hideCheckoutSuccessModel(){
+    $("#checkoutSuccessBorneModal").hide();
+}
+
+

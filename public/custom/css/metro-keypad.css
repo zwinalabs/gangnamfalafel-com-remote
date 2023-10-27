@@ -1,0 +1,263 @@
+.keypad.primary{
+border-color: #0366d6;
+}
+.keypad.primary:focus,
+.keypad.primary.focused {
+-webkit-box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.45);
+    box-shadow: 0 0 0 3px rgba(3, 102, 214, 0.45);
+}
+
+.keypad.secondary:focus
+.keypad.secondary.focused {
+-webkit-box-shadow: 0 0 0 3px rgba(96, 125, 139, 0.45);
+    box-shadow: 0 0 0 3px rgba(96, 125, 139, 0.45);
+}
+.keypad.success {
+border-color: #60a917;
+}
+.keypad.alert {
+border-color: #CE352C;
+}
+
+.keypad.success:focus,
+.keypad.success.focused{
+-webkit-box-shadow: 0 0 0 3px rgba(96, 169, 23, 0.45);
+        box-shadow: 0 0 0 3px rgba(96, 169, 23, 0.45);
+}
+
+.keypad.alert:focus
+.keypad.alert.focused {
+-webkit-box-shadow: 0 0 0 3px rgba(206, 53, 44, 0.45);
+        box-shadow: 0 0 0 3px rgba(206, 53, 44, 0.45);
+}
+.keypad.warning{
+border-color: #ff9447;
+}
+.keypad.warning:focus
+.keypad.warning.focused {
+-webkit-box-shadow: 0 0 0 3px rgba(255, 148, 71, 0.45);
+        box-shadow: 0 0 0 3px rgba(255, 148, 71, 0.45);
+}
+.keypad.yellow {
+border-color: #ffe484;
+}
+.keypad.yellow:focus
+.keypad.yellow.focused {
+-webkit-box-shadow: 0 0 0 3px rgba(255, 228, 132, 0.45);
+        box-shadow: 0 0 0 3px rgba(255, 228, 132, 0.45);
+}
+.keypad.info {
+border-color: #5ebdec;
+}
+.keypad.info:focus
+.keypad.info.focused{
+-webkit-box-shadow: 0 0 0 3px rgba(94, 189, 236, 0.45);
+        box-shadow: 0 0 0 3px rgba(94, 189, 236, 0.45);
+}
+.keypad.dark {
+border-color: #505050;
+}
+.keypad.dark:focus
+.keypad.dark.focused {
+-webkit-box-shadow: 0 0 0 3px rgba(80, 80, 80, 0.45);
+        box-shadow: 0 0 0 3px rgba(80, 80, 80, 0.45);
+}
+.keypad.light {
+border-color: #f8f8f8;
+}
+.keypad.light:focus
+.keypad.light.focused {
+-webkit-box-shadow: 0 0 0 3px rgba(248, 248, 248, 0.45);
+        box-shadow: 0 0 0 3px rgba(248, 248, 248, 0.45);
+}
+
+
+.keypad {
+background-color: #ffffff;
+color: #1d1d1d;
+border: 1px solid #d9d9d9;
+}
+.keypad input {
+border: 0;
+}
+.keypad .keys {
+display: none;
+position: absolute;
+top: 100%;
+left: 0;
+width: auto;
+float: left;
+background-color: inherit;
+color: inherit;
+border: none;
+padding: 0;
+-webkit-user-select: none;
+-moz-user-select: none;
+user-select: none;
+-webkit-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
+z-index: 1000;
+}
+.keypad .keys::before {
+content: '';
+position: absolute;
+background-color: inherit;
+width: 10px;
+height: 10px;
+border: 1px solid #dfdfdf;
+z-index: 2;
+left: -5px;
+top: 50%;
+-webkit-transform: translateY(-50%);
+transform: translateY(-50%);
+margin-top: -5px;
+border-top-color: transparent;
+border-right-color: transparent;
+-webkit-transform: rotate(45deg);
+transform: rotate(45deg);
+}
+.keypad .keys.open {
+display: block;
+-webkit-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
+}
+.keypad .keys.right {
+left: 100%;
+-webkit-transform: translateY(-50%);
+transform: translateY(-50%);
+top: 50%;
+margin-left: -1px;
+}
+.keypad .keys.bottom {
+left: 50%;
+-webkit-transform: translateX(-50%);
+transform: translateX(-50%);
+top: 100%;
+margin-top: -1px;
+}
+.keypad .keys.bottom::before {
+top: 0;
+left: 50%;
+-webkit-transform: translateX(-50%);
+transform: translateX(-50%);
+-webkit-transform: rotate(135deg);
+transform: rotate(135deg);
+}
+.keypad .keys.top {
+top: 0;
+left: 50%;
+-webkit-transform: translateY(-100%) translateX(-50%);
+transform: translateY(-100%) translateX(-50%);
+margin-top: 1px;
+}
+.keypad .keys.top::before {
+top: 100%;
+left: 50%;
+-webkit-transform: translateX(-50%);
+transform: translateX(-50%);
+-webkit-transform: rotate(-45deg);
+transform: rotate(-45deg);
+}
+.keypad .keys.left {
+left: 0;
+-webkit-transform: translateY(-50%) translateX(-100%);
+transform: translateY(-50%) translateX(-100%);
+top: 50%;
+margin-left: 1px;
+}
+.keypad .keys.left::before {
+top: 50%;
+-webkit-transform: translateY(-50%);
+transform: translateY(-50%);
+left: 100%;
+margin-left: -5px;
+-webkit-transform: rotate(225deg);
+transform: rotate(225deg);
+}
+.keypad .keys.bottom-left {
+top: 100%;
+left: 0;
+margin-top: -1px;
+}
+.keypad .keys.bottom-left::before {
+top: 0;
+left: 0.625rem;
+-webkit-transform: rotate(135deg);
+transform: rotate(135deg);
+}
+.keypad .keys.bottom-right {
+top: 100%;
+left: 100%;
+-webkit-transform: translateX(-100%);
+transform: translateX(-100%);
+margin-top: -1px;
+}
+.keypad .keys.bottom-right::before {
+top: 0;
+left: 100%;
+margin-left: -1rem;
+-webkit-transform: rotate(135deg);
+transform: rotate(135deg);
+}
+.keypad .keys.top-left {
+top: 0;
+left: 0;
+-webkit-transform: translateY(-100%);
+transform: translateY(-100%);
+margin-top: 1px;
+}
+.keypad .keys.top-left::before {
+top: 100%;
+left: 0.625rem;
+-webkit-transform: rotate(-45deg);
+transform: rotate(-45deg);
+}
+.keypad .keys.top-right {
+top: 0;
+left: 100%;
+-webkit-transform: translateY(-100%) translateX(-100%);
+transform: translateY(-100%) translateX(-100%);
+margin-top: 1px;
+}
+.keypad .keys.top-right::before {
+top: 100%;
+left: 100%;
+margin-left: -1rem;
+-webkit-transform: rotate(-45deg);
+transform: rotate(-45deg);
+}
+.keypad .key {
+display: block;
+position: relative;
+float: left;
+background-color: inherit;
+color: inherit;
+margin: 0;
+text-align: center;
+border: 1px solid #dfdfdf;
+font-size: 1rem;
+cursor: pointer;
+-webkit-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
+}
+.keypad .key:hover {
+-webkit-transition: all 0.3s ease-in-out;
+transition: all 0.3s ease-in-out;
+-webkit-box-shadow: 0 0 0 3px rgba(228, 228, 228, 0.45);
+box-shadow: 0 0 0 3px rgba(228, 228, 228, 0.45);
+-webkit-transform: scale(1.2);
+transform: scale(1.2);
+z-index: 2;
+}
+.keypad .key.service-key {
+background-color: #f8f8f8;
+}
+.lightbox-overlay {
+background-color: rgba(0, 0, 0, 0.9);
+position: fixed;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+z-index: 2000;
+}
